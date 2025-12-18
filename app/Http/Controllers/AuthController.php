@@ -151,29 +151,63 @@ public function register(Request $request)
     ));
 }
 
-    // Dashboard Kasir
-    public function kasirDashboard()
-    {
-        // View path sesuai struktur folder: kasir/pages/dashboard.blade.php
-        return view('kasir.pages.dashboard');
-    }
+    public function kasirdashboard()
+{
+    $today = now()->format('Y-m-d');
+    $userId = auth()->id();
+
+    // 1. Total Penjualan Kasir Hari Ini (Hanya yang sudah lunas)
+    $totalPenjualan = \App\Models\Order::where('created_by', $userId)
+                        ->where('payment_status', 'paid')
+                        ->whereDate('order_date', $today)
+                        ->sum('total_price');
+
+    // 2. Jumlah Pesanan Baru Hari Ini
+    $jumlahPesanan = \App\Models\Order::where('created_by', $userId)
+                        ->whereDate('order_date', $today)
+                        ->count();
+
+    // 3. Antrean Pembayaran (Belum Bayar)
+    $antreanCount = \App\Models\Order::where('payment_status', 'unpaid')
+                        ->where('status', '!=', 'canceled')
+                        ->count();
+
+    // 4. Stok Roti Menipis (Kurang dari 10)
+    $stokKritis = \App\Models\Product::where('status', 1)
+                        ->where('stock', '<=', 10)
+                        ->count();
+
+    // 5. Riwayat Transaksi Terakhir Kasir
+    $recentOrders = \App\Models\Order::with('customer')
+                        ->where('created_by', $userId)
+                        ->latest()
+                        ->take(5)
+                        ->get();
+
+    return view('kasir.pages.dashboard', compact(
+        'totalPenjualan', 
+        'jumlahPesanan', 
+        'antreanCount', 
+        'stokKritis', 
+        'recentOrders'
+    ));
+}
 
     // Redirect berdasarkan role
-    private function redirectBasedOnRole()
-    {
-        $user = Auth::user();
-        
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.pages.dashboard');
-        } elseif ($user->role === 'kasir') {
-            return redirect()->route('kasir.pages.dashboard');
-        }
-        
-        // Kalau role tidak dikenal, logout dan kembalikan ke login
-        Auth::logout();
-        return redirect()->route('login')->withErrors([
-            'email' => 'Role user tidak valid',
-        ]);
+   private function redirectBasedOnRole()
+{
+    $user = Auth::user();
+    
+    if ($user->role === 'admin') {
+        // Sesuaikan dengan nama route admin kamu
+        return redirect()->route('admin.pages.dashboard'); 
+    } elseif ($user->role === 'kasir') {
+        // SESUAIKAN: harus pakai '.pages.' karena ada group pages di route-mu
+        return redirect()->route('kasir.pages.dashboard');
     }
+    
+    Auth::logout();
+    return redirect()->route('login')->withErrors(['email' => 'Role tidak dikenali.']);
+}
     
 }

@@ -22,7 +22,7 @@
 <div id="wrapper">
 
     {{-- Sidebar --}}
-    @include('admin.partials.sidebar')
+    @include('kasir.partials.sidebar')
 
     {{-- Content Wrapper --}}
     <div id="content-wrapper" class="d-flex flex-column">
@@ -31,7 +31,7 @@
         <div id="content">
 
             {{-- Topbar --}}
-            @include('admin.partials.topbar')
+            @include('kasir.partials.topbar')
 
             {{-- Page Content --}}
             <div class="container-fluid">
@@ -57,7 +57,7 @@
 </a>
 
 {{-- Logout Modal --}}
-@include('admin.partials.logout-modal')
+@include('kasir.partials.logout-modal')
 
 <!-- Scripts -->
 <script src="{{ asset('admin/vendor/jquery/jquery.min.js') }}"></script>

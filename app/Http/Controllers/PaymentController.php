@@ -28,7 +28,9 @@ class PaymentController extends Controller
         return view('admin.pages.payments.create', compact('order'));
     }
 
-   public function store(Request $request, Order $order)
+   // app/Http/Controllers/PaymentController.php
+
+public function store(Request $request, Order $order)
 {
     $request->validate([
         'payment_method' => 'required|in:cash,qris,bank_transfer',
@@ -39,22 +41,27 @@ class PaymentController extends Controller
 
     DB::beginTransaction();
     try {
+        // Hitung Kembalian
+        $kembalian = $request->amount - $order->total_price;
+
         // 1. Simpan data payment
         Payment::create([
             'order_id' => $order->id,
             'payment_method' => $request->payment_method,
             'amount' => $request->amount,
+            'change' => $kembalian, // Pastikan kolom 'change' ada di tabel payments
             'paid_at' => now(),
         ]);
 
-        // 2. Update status order menjadi paid DAN otomatis status pesanan menjadi 'done'
+        // 2. Update status order
         $order->update([
             'payment_status' => 'paid',
-            'status' => 'done' // Otomatis selesai setelah dibayar
+            'status' => 'done',
+            'payment_method' => $request->payment_method // Simpan juga di tabel orders agar sinkron
         ]);
 
         DB::commit();
-        return redirect()->route('admin.orders.show', $order)->with('success', 'Pembayaran berhasil diproses dan pesanan selesai!');
+        return redirect()->route('admin.orders.show', $order)->with('success', 'Pembayaran berhasil! Kembalian: Rp ' . number_format($kembalian, 0, ',', '.'));
         
     } catch (\Exception $e) {
         DB::rollback();

@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Kasir\OrderController as KasirOrder;
 
 Route::get('/', function () {
     return view('pages.home');    
@@ -78,6 +79,25 @@ Route::middleware(['auth', 'checkrole:admin'])->prefix('admin')->name('admin.')-
 });
 // Kasir routes - Harus login & role kasir
 Route::middleware(['auth', 'checkrole:kasir'])->prefix('kasir')->name('kasir.')->group(function () {
-    Route::get('/dashboard', [AuthController::class, 'kasirDashboard'])->name('dashboard');
-    // Tambahkan route kasir lainnya di sini
+    
+    // Group Pages
+    Route::prefix('pages')->name('pages.')->group(function () {
+        Route::get('/dashboard', [AuthController::class, 'kasirdashboard'])->name('dashboard');
+    });
+
+    // Customers (Kasir)
+    Route::resource('customers', \App\Http\Controllers\Kasir\CustomerController::class);
+
+   // 3. FITUR PEMBAYARAN (Taruh di atas agar tidak dianggap parameter {order})
+    Route::get('orders/antrean', [KasirOrder::class, 'antrean'])->name('orders.antrean');
+    Route::post('orders/{id}/bayar', [KasirOrder::class, 'bayar'])->name('orders.bayar');
+
+    // Pesanan (Orders) - Menggunakan Manual agar lebih aman dari konflik admin
+    Route::get('orders', [KasirOrder::class, 'index'])->name('orders.index');
+    Route::get('orders/create', [KasirOrder::class, 'create'])->name('orders.create');
+    Route::post('orders', [KasirOrder::class, 'store'])->name('orders.store');
+    Route::get('orders/{order}', [KasirOrder::class, 'show'])->name('orders.show');
+
+    // Monitoring Stok (Pindahkan ke Controller Kasir jika ada, atau pastikan view-nya tosca)
+    Route::get('stok-roti', [KasirOrder::class, 'stock'])->name('products.stock');
 });
