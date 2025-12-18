@@ -16,5 +16,9 @@ class Voucher extends Model
         'end_date',
         'status' // e.g., 'active', 'expired', 'used'
     ];
+    public function products()
+{
+    return $this->belongsToMany(Product::class, 'product_voucher');
+}
 
 }

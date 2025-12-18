@@ -2,40 +2,43 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-use HasFactory;
-protected $fillable = [
-    'customer_id',
-    'created_by',
-    'order_date',
-    'pickup_date',
-  'status',
-    'total_price',
-    'payment_status'
-  
-  
-];
-public function customer(){
-    return $this->belongsTo(Customer::class, 'customer_id');
-}
-public function kasir(){ 
+    protected $fillable = [
+        'customer_id',
+        'created_by',
+        'order_date',
+        'pickup_date',
+        'status',
+        'total_price',
+        'payment_status'
+    ];
+
+    protected $casts = [
+        'order_date' => 'datetime',
+        'pickup_date' => 'datetime',
+        'total_price' => 'decimal:2',
+    ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function creator()
+    {
         return $this->belongsTo(User::class, 'created_by');
     }
-public function user(){
-    return $this->belongsTo(User::class, 'created_by');
 
-}
-public function orderItems(){
-    return $this->hasMany(OrderItem::class);
-}
-public function items(){
-    return $this->hasMany(OrderItem::class);
-}
-public function payments(){
-    return $this->hasMany(Payment::class);
-}
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }

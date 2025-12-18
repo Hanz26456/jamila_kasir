@@ -1,104 +1,217 @@
-<html lang="en">
- <head>
+<!DOCTYPE html>
+<html lang="id">
+<head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <title>
-   Login - Jamila Bakery
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+  <title>Login - Jamila Bakery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
-   body {
-      font-family: 'Inter', sans-serif;
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f0f4f4;
+    }
+    .brand-font {
+      font-family: 'Fraunces', serif;
+    }
+    .input-field {
+      background-color: #f8fafc;
+      transition: all 0.2s ease;
+    }
+    .input-field:focus {
+      background-color: #ffffff;
+      box-shadow: 0 0 0 2px rgba(74, 55, 40, 0.1);
+    }
+    .error-message {
+      animation: slideDown 0.3s ease-out;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
- </head>
- <body class="bg-[#d0f0f0] min-h-screen flex items-center justify-center p-4">
-  <div class="relative bg-white rounded-xl shadow-lg max-w-5xl w-full flex flex-col md:flex-row items-center md:items-start p-8 md:p-12">
-   <!-- Abstract shapes behind -->
-   <img alt="Abstract turquoise shape behind the card top left" class="hidden md:block absolute top-0 left-0 -z-10 w-[600px] h-[400px] rounded-full opacity-70" height="400" src="https://storage.googleapis.com/a1aa/image/b411bd7b-0cf7-4920-16e0-24c48af40dc8.jpg" style="clip-path: ellipse(50% 70% at 30% 30%)" width="600"/>
-   <img alt="Abstract green shape behind the card bottom right" class="hidden md:block absolute bottom-0 right-0 -z-10 w-[600px] h-[400px] rounded-full opacity-70" height="400" src="https://storage.googleapis.com/a1aa/image/50b3e803-ff11-4a92-33b8-453aca23df06.jpg" style="clip-path: ellipse(50% 70% at 70% 70%)" width="600"/>
-   <!-- Left illustration -->
-   <div class="md:w-1/2 flex justify-center md:justify-start mb-8 md:mb-0">
-    <img alt="Illustration of a man with a briefcase talking to a woman behind a reception desk with a plant" class="w-[320px] h-auto" height="300" src="https://storage.googleapis.com/a1aa/image/5435d83d-c172-414e-d58c-2479a2aff0f8.jpg" width="400"/>
-   </div>
-   <!-- Right form -->
-   <div class="md:w-1/2 max-w-md">
-    <h1 class="text-[#1a1a1a] text-2xl font-normal mb-2">
-     Welcome Back :)
-    </h1>
-    <p class="text-[#4a4a4a] text-xs mb-6 leading-tight">
-     To keep connected with us please login with your personal information by email address and password
-     <span class="inline-block align-middle text-lg">
-      🔔
-     </span>
-    </p>
-    <form class="space-y-4" onsubmit="return false;">
-     <!-- Email input -->
-     <label class="block text-xs text-[#4a4a4a] mb-1 flex items-center gap-2" for="email">
-      <i class="far fa-envelope text-[#4a4a4a]">
-      </i>
-      Email Address
-     </label>
-     <input class="w-full text-xs text-[#4a4a4a] bg-[#f3f7fc] border border-[#d1d5db] rounded-md py-2 px-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-600" id="email" type="email" value=""/>
-     <span aria-hidden="true" class="absolute right-3 top-[calc(100%_-_2.5rem)] text-green-600 text-lg hidden">
-      <i class="fas fa-check-circle">
-      </i>
-     </span>
-     <!-- Password input -->
-     <label class="block text-xs text-[#4a4a4a] mb-1 flex items-center gap-2" for="password">
-      <i class="fas fa-lock text-[#4a4a4a]">
-      </i>
-      Password
-     </label>
-     <div class="relative">
-      <input class="w-full text-xs text-[#4a4a4a] bg-[#f3f7fc] border border-[#d1d5db] rounded-md py-2 px-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-600" id="password" type="password" value=""/>
-      <button aria-label="Toggle password visibility" class="absolute right-2 top-1/2 -translate-y-1/2 text-[#4a4a4a] hover:text-blue-600 focus:outline-none" id="togglePassword" type="button">
-       <i class="fas fa-eye">
-       </i>
-      </button>
-     </div>
-     <div class="flex justify-between items-center text-xs text-[#4a4a4a] mt-1">
-      <label class="flex items-center gap-2">
-       <input checked="" class="w-4 h-4 text-green-600 border border-gray-300 rounded focus:ring-green-500 focus:ring-2" type="checkbox"/>
-       <span class="text-green-600 font-semibold">
-        Remember Me
-       </span>
-      </label>
-      <button class="text-[#4a4a4a] hover:underline focus:outline-none" type="button">
-       Forget Password?
-      </button>
-     </div>
-     <div class="flex gap-4 mt-6">
-      <button class="bg-blue-600 text-white text-xs font-semibold rounded-full px-6 py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 flex-1" type="submit">
-       Login Now
-      </button>
-     </div>
-    </form>
-   </div>
-   <!-- Logo top left -->
-   <div class="absolute top-6 left-6 flex items-center gap-2">
-    <img alt="Jamila Bakery logo icon blue" class="w-6 h-6" height="24" src="https://storage.googleapis.com/a1aa/image/2fee115c-7757-446e-2c2c-1dc1c6ed0ad8.jpg" width="24"/>
-    <span class="text-[#2563eb] font-semibold text-sm select-none">
-     jamila bakery
-    </span>
-   </div>
-  </div>
-  <script>
-   const togglePassword = document.getElementById('togglePassword');
-   const passwordInput = document.getElementById('password');
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-   togglePassword.addEventListener('click', () => {
-     if (passwordInput.type === 'password') {
-       passwordInput.type = 'text';
-       togglePassword.innerHTML = '<i class="fas fa-eye-slash"></i>';
-     } else {
-       passwordInput.type = 'password';
-       togglePassword.innerHTML = '<i class="fas fa-eye"></i>';
-     }
-   });
+  <div class="max-w-4xl w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden grid md:grid-cols-2">
+    
+    <!-- Left Side - Branding -->
+    <div class="bg-[#fdf2f0] p-12 flex flex-col items-center justify-center text-center">
+      <div class="mb-6 relative">
+        <div class="text-6xl">🧁</div>
+        <div class="absolute -top-2 -right-2 text-yellow-500 animate-pulse text-xl">✨</div>
+      </div>
+      
+      <h2 class="text-2xl font-bold text-[#4a3728] mb-3">Freshly Baked Happiness</h2>
+      <p class="text-gray-500 text-sm leading-relaxed mb-10 max-w-[250px]">
+        Temukan kelezatan roti terbaik yang dibuat dengan cinta setiap harinya.
+      </p>
+      
+      <h1 class="brand-font text-4xl text-[#7c5639]">jamila bakery</h1>
+    </div>
+
+    <!-- Right Side - Login Form -->
+    <div class="p-10 md:p-16 flex flex-col justify-center">
+      <div class="mb-10 text-center md:text-left">
+        <h2 class="text-3xl font-bold text-gray-800 flex items-center justify-center md:justify-start gap-2">
+          Selamat Datang <span class="text-2xl">👋</span>
+        </h2>
+        <p class="text-gray-400 mt-1">Silakan masuk ke akun Jamila Bakery Anda</p>
+      </div>
+
+      <!-- Success Message (jika ada) -->
+      @if(session('success'))
+      <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-2xl error-message">
+        <div class="flex items-center gap-2">
+          <i data-lucide="check-circle" class="w-5 h-5"></i>
+          <span>{{ session('success') }}</span>
+        </div>
+      </div>
+      @endif
+
+      <!-- Error Messages -->
+      @if($errors->any())
+      <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl error-message">
+        <div class="flex items-start gap-2">
+          <i data-lucide="alert-circle" class="w-5 h-5 mt-0.5"></i>
+          <div class="flex-1">
+            @foreach($errors->all() as $error)
+              <p class="text-sm">{{ $error }}</p>
+            @endforeach
+          </div>
+        </div>
+      </div>
+      @endif
+
+      <!-- Login Form -->
+      <form class="space-y-6" method="POST" action="{{ route('login.post') }}">
+        @csrf
+        
+        <!-- Email Field -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+          <div class="relative group">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-[#7c5639]">
+              <i data-lucide="mail" class="w-5 h-5"></i>
+            </span>
+            <input 
+              type="email" 
+              name="email"
+              value="{{ old('email') }}"
+              placeholder="nama@email.com"
+              required
+              autofocus
+              class="input-field w-full pl-12 pr-4 py-3 border {{ $errors->has('email') ? 'border-red-300' : 'border-gray-200' }} rounded-2xl outline-none text-sm"
+            />
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+          <div class="relative group">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-[#7c5639]">
+              <i data-lucide="lock" class="w-5 h-5"></i>
+            </span>
+            <input 
+              id="password"
+              type="password" 
+              name="password"
+              placeholder="••••••••"
+              required
+              class="input-field w-full pl-12 pr-12 py-3 border {{ $errors->has('password') ? 'border-red-300' : 'border-gray-200' }} rounded-2xl outline-none text-sm"
+            />
+            <button type="button" onclick="togglePass()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600">
+              <i data-lucide="eye-off" id="eyeIcon" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember & Forgot Password -->
+        <div class="flex items-center justify-between text-sm">
+          <label class="flex items-center gap-2 cursor-pointer group">
+            <input 
+              type="checkbox" 
+              name="remember" 
+              class="w-4 h-4 rounded border-gray-300 text-[#4a3728] focus:ring-[#4a3728]"
+            >
+            <span class="text-gray-500 group-hover:text-gray-700 transition-colors">Ingat saya</span>
+          </label>
+          <a href="#" class="text-[#c27a5d] font-semibold hover:underline">Lupa Password?</a>
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit"
+          class="w-full bg-[#4a3728] text-white font-bold py-4 rounded-2xl hover:bg-[#3d2d21] shadow-lg shadow-gray-200 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          id="submitBtn"
+        >
+          <span id="btnText">Masuk Sekarang</span>
+          <span id="btnLoading" class="hidden">
+            <svg class="animate-spin inline-block w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Memproses...
+          </span>
+        </button>
+
+        <!-- Register Link -->
+        <p class="text-center text-sm text-gray-400">
+        Belum punya akun? <a href="{{ route('register') }}" class="text-[#c27a5d] font-bold hover:underline">Daftar Gratis</a>
+      </p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Inisialisasi Lucide Icons
+    lucide.createIcons();
+
+    // Fungsi Toggle Password
+    function togglePass() {
+      const passInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        eyeIcon.setAttribute('data-lucide', 'eye');
+      } else {
+        passInput.type = 'password';
+        eyeIcon.setAttribute('data-lucide', 'eye-off');
+      }
+      lucide.createIcons(); // Refresh icons
+    }
+
+    // Loading state saat submit
+    document.querySelector('form').addEventListener('submit', function() {
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnLoading = document.getElementById('btnLoading');
+      
+      submitBtn.disabled = true;
+      btnText.classList.add('hidden');
+      btnLoading.classList.remove('hidden');
+    });
+
+    // Auto dismiss success/error messages after 5 seconds
+    setTimeout(function() {
+      const alerts = document.querySelectorAll('.error-message');
+      alerts.forEach(function(alert) {
+        alert.style.transition = 'opacity 0.5s ease-out';
+        alert.style.opacity = '0';
+        setTimeout(function() {
+          alert.remove();
+        }, 500);
+      });
+    }, 5000);
   </script>
- </body>
+</body>
 </html>
