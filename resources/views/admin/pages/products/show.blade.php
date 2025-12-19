@@ -31,7 +31,7 @@
                         </tr>
                         <tr>
                             <th>Harga</th>
-                            <td>: <strong>Rp {{ number_format($product->price, 0, ',', '.') }}</strong></td>
+                            <td>: <strong class="text-primary">Rp {{ number_format($product->price, 0, ',', '.') }}</strong></td>
                         </tr>
                         <tr>
                             <th>Stok</th>
@@ -54,18 +54,43 @@
                         </tr>
                         <tr>
                             <th>Deskripsi</th>
-                            <td>: <br><p class="mt-2">{{ $product->description ?? 'Tidak ada deskripsi.' }}</p></td>
+                            <td>: <br><p class="mt-2 text-justify text-dark">{{ $product->description ?? 'Tidak ada deskripsi.' }}</p></td>
                         </tr>
                         <tr>
                             <th>Tanggal Dibuat</th>
                             <td>: {{ $product->created_at->format('d M Y H:i') }}</td>
                         </tr>
+                        <tr>
+                            <th>Terakhir Diupdate</th>
+                            <td>: {{ $product->updated_at->format('d M Y H:i') }}</td>
+                        </tr>
                     </table>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer bg-white">
                     <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning">
                         <i class="fas fa-edit"></i> Edit Produk
                     </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Foto Produk</h6>
+                </div>
+                <div class="card-body text-center">
+                    @if($product->image)
+                        <img src="{{ asset('storage/' . $product->image) }}" 
+                             alt="{{ $product->name }}" 
+                             class="img-fluid rounded shadow-sm border"
+                             style="max-height: 400px; width: 100%; object-fit: contain;">
+                    @else
+                        <div class="bg-light d-flex flex-column align-items-center justify-content-center border rounded py-5">
+                            <i class="fas fa-image fa-4x text-gray-300 mb-3"></i>
+                            <p class="text-gray-500">Tidak ada foto tersedia</p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -3,7 +3,6 @@
 @section('content')
 <div class="container-fluid">
     
-    <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Tambah Produk</h1>
         <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">
@@ -18,7 +17,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">Form Produk Baru</h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.products.store') }}" method="POST">
+                    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="row">
@@ -70,57 +69,76 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="price">Harga <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Rp</span>
+                                    <label for="image">Gambar Produk</label>
+                                    <input type="file" 
+                                           class="form-control @error('image') is-invalid @enderror" 
+                                           id="image" 
+                                           name="image"
+                                           onchange="previewImage()">
+                                    <small class="text-muted">Format: JPG, PNG, JPEG, GIF. Maks: 2MB</small>
+                                    @error('image')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mt-2">
+                                    <img id="img-preview" class="img-fluid rounded shadow-sm" style="max-height: 200px; display: none;">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="price">Harga <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Rp</span>
+                                                </div>
+                                                <input type="number" 
+                                                       class="form-control @error('price') is-invalid @enderror" 
+                                                       id="price" 
+                                                       name="price" 
+                                                       value="{{ old('price') }}"
+                                                       min="0"
+                                                       required>
+                                            </div>
+                                            @error('price')
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
-                                        <input type="number" 
-                                               class="form-control @error('price') is-invalid @enderror" 
-                                               id="price" 
-                                               name="price" 
-                                               value="{{ old('price') }}"
-                                               min="0"
-                                               step="100"
-                                               required>
-                                        @error('price')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="stock">Stok <span class="text-danger">*</span></label>
-                                    <input type="number" 
-                                           class="form-control @error('stock') is-invalid @enderror" 
-                                           id="stock" 
-                                           name="stock" 
-                                           value="{{ old('stock') }}"
-                                           min="0"
-                                           required>
-                                    @error('stock')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="status">Status <span class="text-danger">*</span></label>
-                                    <select class="form-control @error('status') is-invalid @enderror" 
-                                            id="status" 
-                                            name="status" 
-                                            required>
-                                        <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Aktif</option>
-                                        <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Nonaktif</option>
-                                    </select>
-                                    @error('status')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="stock">Stok <span class="text-danger">*</span></label>
+                                            <input type="number" 
+                                                   class="form-control @error('stock') is-invalid @enderror" 
+                                                   id="stock" 
+                                                   name="stock" 
+                                                   value="{{ old('stock') }}"
+                                                   min="0"
+                                                   required>
+                                            @error('stock')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="status">Status <span class="text-danger">*</span></label>
+                                            <select class="form-control @error('status') is-invalid @enderror" 
+                                                    id="status" 
+                                                    name="status" 
+                                                    required>
+                                                <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Aktif</option>
+                                                <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Nonaktif</option>
+                                            </select>
+                                            @error('status')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -138,6 +156,21 @@
             </div>
         </div>
     </div>
-
 </div>
+
+<script>
+    function previewImage() {
+        const image = document.querySelector('#image');
+        const imgPreview = document.querySelector('#img-preview');
+
+        imgPreview.style.display = 'block';
+
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
 @endsection

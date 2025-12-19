@@ -59,11 +59,12 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered text-dark" id="orderTable">
-                                <thead class="bg-light">
+                                <thead class="bg-light text-center">
                                     <tr>
                                         <th>Roti</th>
-                                        <th width="120">Qty</th>
-                                        <th width="180">Subtotal</th>
+                                        <th width="80">Foto</th>
+                                        <th width="100">Qty</th>
+                                        <th width="150">Subtotal</th>
                                         <th width="50">#</th>
                                     </tr>
                                 </thead>
@@ -71,30 +72,35 @@
                                     <tr class="row-item">
                                         <td>
                                             <select name="items[0][product_id]" class="form-control product-select" required>
-                                                <option value="" data-price="0" data-stock="0">-- Pilih Produk --</option>
+                                                <option value="" data-price="0" data-stock="0" data-image="">-- Pilih Produk --</option>
                                                 @foreach($products as $p)
-                                                    {{-- Di sini kita tambahkan teks Stok agar Kasir bisa lihat langsung --}}
-                                                    <option value="{{ $p->id }}" data-price="{{ $p->price }}" data-stock="{{ $p->stock }}">
-                                                        {{ $p->name }} (Rp{{ number_format($p->price) }}) - Stok: {{ $p->stock }}
+                                                    <option value="{{ $p->id }}" 
+                                                            data-price="{{ $p->price }}" 
+                                                            data-stock="{{ $p->stock }}"
+                                                            data-image="{{ $p->image ? asset('storage/' . $p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&color=7F9CF5&background=EBF4FF' }}">
+                                                        {{ $p->name }} (Rp{{ number_format($p->price) }})
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <small class="text-muted stock-info font-italic"></small>
+                                            <small class="text-muted stock-info font-italic d-block mt-1"></small>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <img src="" class="img-preview img-thumbnail shadow-sm" style="width: 55px; height: 55px; object-fit: cover; display: none;">
                                         </td>
                                         <td>
-                                            <input type="number" name="items[0][quantity]" class="form-control qty-input" value="1" min="1" required>
+                                            <input type="number" name="items[0][quantity]" class="form-control qty-input text-center" value="1" min="1" required>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control subtotal-input font-weight-bold" readonly value="Rp 0">
+                                            <input type="text" class="form-control subtotal-input font-weight-bold text-right" readonly value="Rp 0">
                                         </td>
-                                        <td class="text-center">-</td>
+                                        <td class="text-center align-middle">-</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr class="bg-light">
-                                        <th colspan="2" class="text-right align-middle font-weight-bold">Estimasi Total</th>
+                                        <th colspan="3" class="text-right align-middle font-weight-bold">Estimasi Total</th>
                                         <th colspan="2">
-                                            <h5 class="m-0 font-weight-bold text-info" id="grandTotalDisplay">Rp 0</h5>
+                                            <h5 class="m-0 font-weight-bold text-info text-right" id="grandTotalDisplay">Rp 0</h5>
                                         </th>
                                     </tr>
                                 </tfoot>
@@ -114,24 +120,58 @@
 <script>
     let rowCount = 1;
 
+    // Fungsi Update Foto & Subtotal
+    function updateRowUI(row) {
+        let option = row.find('.product-select option:selected');
+        let imageUrl = option.data('image');
+        let price = parseInt(option.data('price')) || 0;
+        let stock = parseInt(option.data('stock')) || 0;
+        let qtyInput = row.find('.qty-input');
+        let qty = parseInt(qtyInput.val()) || 0;
+
+        // Update Image
+        let previewImg = row.find('.img-preview');
+        if (imageUrl && option.val() !== "") {
+            previewImg.attr('src', imageUrl).show();
+        } else {
+            previewImg.hide();
+        }
+
+        // Update Stock Info
+        row.find('.stock-info').text(option.val() !== "" ? 'Tersedia: ' + stock + ' pcs' : '');
+        qtyInput.attr('max', stock);
+
+        // Update Subtotal
+        let subtotal = price * qty;
+        row.find('.subtotal-input').val('Rp ' + new Intl.NumberFormat('id-ID').format(subtotal));
+        
+        calculateGrandTotal();
+    }
+
     // Logika Tambah Baris
     $('#addRow').click(function() {
         let newRow = `
         <tr class="row-item">
             <td>
                 <select name="items[${rowCount}][product_id]" class="form-control product-select" required>
-                    <option value="" data-price="0" data-stock="0">-- Pilih Produk --</option>
+                    <option value="" data-price="0" data-stock="0" data-image="">-- Pilih Produk --</option>
                     @foreach($products as $p)
-                        <option value="{{ $p->id }}" data-price="{{ $p->price }}" data-stock="{{ $p->stock }}">
-                            {{ $p->name }} (Rp{{ number_format($p->price) }}) - Stok: {{ $p->stock }}
+                        <option value="{{ $p->id }}" 
+                                data-price="{{ $p->price }}" 
+                                data-stock="{{ $p->stock }}"
+                                data-image="{{ $p->image ? asset('storage/' . $p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&color=7F9CF5&background=EBF4FF' }}">
+                            {{ $p->name }} (Rp{{ number_format($p->price) }})
                         </option>
                     @endforeach
                 </select>
-                <small class="text-muted stock-info font-italic"></small>
+                <small class="text-muted stock-info font-italic d-block mt-1"></small>
             </td>
-            <td><input type="number" name="items[${rowCount}][quantity]" class="form-control qty-input" value="1" min="1" required></td>
-            <td><input type="text" class="form-control subtotal-input font-weight-bold" readonly value="Rp 0"></td>
-            <td class="text-center">
+            <td class="text-center align-middle">
+                <img src="" class="img-preview img-thumbnail shadow-sm" style="width: 55px; height: 55px; object-fit: cover; display: none;">
+            </td>
+            <td><input type="number" name="items[${rowCount}][quantity]" class="form-control qty-input text-center" value="1" min="1" required></td>
+            <td><input type="text" class="form-control subtotal-input font-weight-bold text-right" readonly value="Rp 0"></td>
+            <td class="text-center align-middle">
                 <button type="button" class="btn btn-danger btn-sm removeRow"><i class="fas fa-trash"></i></button>
             </td>
         </tr>`;
@@ -145,25 +185,9 @@
         calculateGrandTotal();
     });
 
-    // Perubahan Produk
+    // Event saat produk berubah
     $(document).on('change', '.product-select', function() {
-        let row = $(this).closest('tr');
-        let option = $(this).find('option:selected');
-        let stock = parseInt(option.data('stock')) || 0;
-        
-        // Tampilkan info stok di bawah dropdown
-        row.find('.stock-info').text('Tersedia: ' + stock + ' pcs');
-        
-        // Batasi input qty maksimal sesuai stok
-        let qtyInput = row.find('.qty-input');
-        qtyInput.attr('max', stock);
-
-        // Jika qty saat ini > stok yang baru dipilih, reset ke stok maksimal
-        if (parseInt(qtyInput.val()) > stock) {
-            qtyInput.val(stock);
-        }
-
-        updateRowSubtotal(row);
+        updateRowUI($(this).closest('tr'));
     });
 
     // Validasi Qty Real-time
@@ -177,18 +201,8 @@
             $(this).val(stock);
         }
         
-        updateRowSubtotal(row);
+        updateRowUI(row);
     });
-
-    // Update Harga Baris
-    function updateRowSubtotal(row) {
-        let price = parseInt(row.find('.product-select option:selected').data('price')) || 0;
-        let qty = parseInt(row.find('.qty-input').val()) || 0;
-        let subtotal = price * qty;
-        
-        row.find('.subtotal-input').val('Rp ' + new Intl.NumberFormat('id-ID').format(subtotal));
-        calculateGrandTotal();
-    }
 
     // Hitung Total Seluruhnya
     function calculateGrandTotal() {

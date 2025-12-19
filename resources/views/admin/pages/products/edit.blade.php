@@ -15,7 +15,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Form Edit Produk</h6>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.products.update', $product) }}" method="POST">
+            <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -76,6 +76,27 @@
                     @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="image">Gambar Produk (Kosongkan jika tidak ingin ganti)</label>
+                            <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" onchange="previewImage()">
+                            @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Pratinjau Gambar:</label>
+                        <div class="image-preview-container">
+                            @if($product->image)
+                                <img src="{{ asset('storage/' . $product->image) }}" id="img-preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                            @else
+                                <img id="img-preview" class="img-fluid rounded shadow-sm" style="max-height: 150px; display: none;">
+                                <p id="no-image-text" class="text-muted italic">Tidak ada gambar saat ini</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
                 <hr>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Simpan Perubahan
@@ -84,4 +105,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    function previewImage() {
+        const image = document.querySelector('#image');
+        const imgPreview = document.querySelector('#img-preview');
+        const noImageText = document.querySelector('#no-image-text');
+
+        if (noImageText) noImageText.style.display = 'none';
+        imgPreview.style.display = 'block';
+
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
 @endsection

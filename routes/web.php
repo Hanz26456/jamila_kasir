@@ -66,6 +66,7 @@ Route::middleware(['auth', 'checkrole:admin'])->prefix('admin')->name('admin.')-
     Route::resource('customers', CustomerController::class);
     // Kita buat terpisah agar bisa memproses pembayaran dari detail order
     Route::get('payments', [PaymentController::class, 'index'])->name('payments.index');
+     Route::get('/orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     Route::get('orders/{order}/payment', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('orders/{order}/payment', [PaymentController::class, 'store'])->name('payments.store');
     // Phase 2 - Stok Produk (Monitoring)
@@ -89,6 +90,7 @@ Route::middleware(['auth', 'checkrole:kasir'])->prefix('kasir')->name('kasir.')-
     Route::resource('customers', \App\Http\Controllers\Kasir\CustomerController::class);
 
    // 3. FITUR PEMBAYARAN (Taruh di atas agar tidak dianggap parameter {order})
+   Route::get('/kasir/orders/{order}/print', [KasirOrder::class, 'print'])->name('orders.print');
     Route::get('orders/antrean', [KasirOrder::class, 'antrean'])->name('orders.antrean');
     Route::post('orders/{id}/bayar', [KasirOrder::class, 'bayar'])->name('orders.bayar');
 

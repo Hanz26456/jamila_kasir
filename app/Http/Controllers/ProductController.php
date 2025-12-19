@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -29,15 +30,25 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|boolean',
         ], [
             'category_id.required' => 'Kategori wajib dipilih',
             'name.required' => 'Nama produk wajib diisi',
+            'image.image' => 'File harus berupa gambar',
+            'image.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif',
+            'image.max' => 'Ukuran gambar maksimal 2MB',
             'price.required' => 'Harga wajib diisi',
             'stock.required' => 'Stok wajib diisi',
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validated['image'] = $imagePath;
+        }
 
         Product::create($validated);
 
@@ -66,10 +77,22 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|boolean',
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
+            }
+            
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validated['image'] = $imagePath;
+        }
 
         $product->update($validated);
 
@@ -80,24 +103,30 @@ class ProductController extends Controller
     // Hapus produk
     public function destroy(Product $product)
     {
+        // Hapus gambar jika ada
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
+            Storage::disk('public')->delete($product->image);
+        }
+
         $product->delete();
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil dihapus!');
     }
+
     public function stockMonitoring()
-{
-    // Mengambil produk dengan stok di bawah 10 (stok kritis)
-    $lowStockProducts = Product::with('category')
-        ->where('stock', '<', 10)
-        ->orderBy('stock', 'asc')
-        ->get();
+    {
+        // Mengambil produk dengan stok di bawah 10 (stok kritis)
+        $lowStockProducts = Product::with('category')
+            ->where('stock', '<', 10)
+            ->orderBy('stock', 'asc')
+            ->get();
 
-    // Mengambil semua produk untuk tabel pantauan
-    $allProducts = Product::with('category')
-        ->orderBy('stock', 'asc')
-        ->paginate(15);
+        // Mengambil semua produk untuk tabel pantauan
+        $allProducts = Product::with('category')
+            ->orderBy('stock', 'asc')
+            ->paginate(15);
 
-    return view('admin.pages.products.stock', compact('lowStockProducts', 'allProducts'));
-}
+        return view('admin.pages.products.stock', compact('lowStockProducts', 'allProducts'));
+    }
 }

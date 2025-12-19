@@ -13,6 +13,8 @@ class Voucher extends Model
         'discount_type', // e.g., 'percentage' or 'fixed'
         'discount_value',
         'start_date',
+        'usage_limit',
+        'used_count',
         'end_date',
         'status' // e.g., 'active', 'expired', 'used'
     ];

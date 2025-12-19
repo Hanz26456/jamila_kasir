@@ -8,7 +8,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['order_id', 'payment_method', 'amount', 'paid_at'];
+    protected $fillable = ['order_id', 'payment_method', 'change', 'amount', 'paid_at'];
 
     public function order()
     {
