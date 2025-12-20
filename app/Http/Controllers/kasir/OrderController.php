@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Customer;
-use App\Models\Voucher; // Pastikan Model Voucher di-import
+use App\Models\Voucher; 
 use App\Models\OrderItem;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -192,8 +192,6 @@ class OrderController extends Controller
     }
     public function stock()
     {
-        // Mengambil produk yang aktif, diurutkan dari stok terkecil agar kasir waspada
-        // Sertakan relasi 'category' agar tidak error saat memanggil $product->category->name
         $products = Product::with('category')
                     ->where('status', 1)
                     ->orderBy('stock', 'asc')

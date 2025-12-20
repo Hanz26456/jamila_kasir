@@ -72,6 +72,14 @@
         </a>
     </li>
 
+     <!-- Pre-orders -->
+   <li class="nav-item {{ request()->routeIs('admin.pre-orders.index') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.pre-orders.index') }}">
+            <i class="fas fa-fw fa-shopping-cart"></i>
+            <span>Pre Order</span>
+        </a>
+    </li>
+
     <!-- Payments -->
     <li class="nav-item">
          <a class="nav-link" href="{{ route('admin.payments.index') }}">

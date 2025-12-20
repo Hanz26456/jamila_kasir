@@ -11,6 +11,8 @@ use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Kasir\OrderController as KasirOrder;
+use App\Http\Controllers\PreOrderController;
+use App\Http\Controllers\Kasir\PreOrderController as KasirPreOrderController;
 
 Route::get('/', function () {
     return view('pages.home');    
@@ -77,6 +79,22 @@ Route::middleware(['auth', 'checkrole:admin'])->prefix('admin')->name('admin.')-
     Route::get('reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
     // Phase 3 - Kelola Pengguna (CRUD)
     Route::resource('users', UserController::class);
+
+    Route::resource('pre-orders', PreOrderController::class);
+    
+    // Pre-Order Payment Routes
+    Route::post('pre-orders/{preOrder}/pay-dp', [PreOrderController::class, 'payDP'])
+        ->name('pre-orders.pay-dp');
+    Route::post('pre-orders/{preOrder}/pay-remaining', [PreOrderController::class, 'payRemaining'])
+        ->name('pre-orders.pay-remaining');
+    
+    // Pre-Order Status Update
+    Route::patch('pre-orders/{preOrder}/status', [PreOrderController::class, 'updateStatus'])
+        ->name('pre-orders.update-status');
+    
+    // Print Pre-Order
+    Route::get('pre-orders/{preOrder}/print', [PreOrderController::class, 'print'])
+        ->name('pre-orders.print');
 });
 // Kasir routes - Harus login & role kasir
 Route::middleware(['auth', 'checkrole:kasir'])->prefix('kasir')->name('kasir.')->group(function () {
@@ -102,4 +120,41 @@ Route::middleware(['auth', 'checkrole:kasir'])->prefix('kasir')->name('kasir.')-
 
     // Monitoring Stok (Pindahkan ke Controller Kasir jika ada, atau pastikan view-nya tosca)
     Route::get('stok-roti', [KasirOrder::class, 'stock'])->name('products.stock');
+
+     Route::get('pre-orders', [KasirPreOrderController::class, 'index'])
+        ->name('pre-orders.index');
+    Route::get('pre-orders/create', [KasirPreOrderController::class, 'create'])
+        ->name('pre-orders.create');
+    Route::post('pre-orders', [KasirPreOrderController::class, 'store'])
+        ->name('pre-orders.store');
+    Route::get('pre-orders/{id}', [KasirPreOrderController::class, 'show'])
+        ->name('pre-orders.show');
+    
+    // Payment Queue (Antrean Pembayaran)
+    Route::get('pre-orders-payment-queue', [KasirPreOrderController::class, 'antrean'])
+        ->name('pre-orders.payment-queue');
+    
+    // DP Payment
+    Route::get('pre-orders/{id}/pay-dp', [KasirPreOrderController::class, 'showPayDP'])
+        ->name('pre-orders.show-pay-dp');
+    Route::post('pre-orders/{id}/pay-dp', [KasirPreOrderController::class, 'payDP'])
+        ->name('pre-orders.pay-dp');
+    
+    // Remaining Payment (Pelunasan)
+    Route::get('pre-orders/{id}/pay-remaining', [KasirPreOrderController::class, 'showPayRemaining'])
+        ->name('pre-orders.show-pay-remaining');
+    Route::post('pre-orders/{id}/pay-remaining', [KasirPreOrderController::class, 'payRemaining'])
+        ->name('pre-orders.pay-remaining');
+    
+    // Update Status
+    Route::patch('pre-orders/{id}/status', [KasirPreOrderController::class, 'updateStatus'])
+        ->name('pre-orders.update-status');
+    
+    // Print
+    Route::get('pre-orders/{id}/print', [KasirPreOrderController::class, 'print'])
+        ->name('pre-orders.print');
+    
+    // Schedule (Jadwal Produksi)
+    Route::get('pre-orders-schedule', [KasirPreOrderController::class, 'schedule'])
+        ->name('pre-orders.schedule');
 });
