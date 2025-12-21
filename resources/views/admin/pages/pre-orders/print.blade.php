@@ -89,8 +89,8 @@
     {{-- Header Toko --}}
     <div class="header">
         <h2>JAMILA BAKERY</h2>
-        <p>Jl. Contoh No. 123, Jember<br>
-        Telp/WA: 0812-3456-7890</p>
+        <p>Jl. Raya Pakisan, Bondowoso<br>
+        Telp/WA: 0822-3798-2432</p>
     </div>
 
     {{-- Order Info --}}

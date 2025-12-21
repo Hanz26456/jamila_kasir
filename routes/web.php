@@ -15,6 +15,19 @@ use App\Http\Controllers\PreOrderController;
 use App\Http\Controllers\Kasir\PreOrderController as KasirPreOrderController;
 
 Route::get('/', function () {
+    // Cek apakah user sudah login melalui session atau cookie remember-me
+    if (auth()->check()) {
+        $role = auth()->user()->role;
+        
+        // Redirect otomatis berdasarkan role
+        if ($role === 'admin') {
+            return redirect()->route('admin.pages.dashboard');
+        } elseif ($role === 'kasir') {
+            return redirect()->route('kasir.pages.dashboard');
+        }
+    }
+    
+    // Jika belum login, baru tampilkan landing page
     return view('pages.home');    
 })->name('home');
 

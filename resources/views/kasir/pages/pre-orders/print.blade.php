@@ -60,8 +60,8 @@
     {{-- Header --}}
     <div class="header">
         <h2>JAMILA BAKERY</h2>
-        <p>Jl. Contoh No. 123, Jember<br>
-        Telp: 0331-123456</p>
+        <p>Jl. Raya Pakisan, Bondowoso<br>
+        Telp: 0822-3798-2432</p>
     </div>
 
     {{-- Info Order --}}
