@@ -88,6 +88,14 @@ Route::middleware(['auth', 'checkrole:admin'])->prefix('admin')->name('admin.')-
     // Reports & Monitoring
     Route::get('reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
     Route::get('stock-monitoring', [ProductController::class, 'stockMonitoring'])->name('stock.monitoring');
+     Route::post('pre-orders/{preOrder}/pay-dp', [PreOrderController::class, 'payDP'])
+    ->name('pre-orders.pay-dp');
+    Route::post('pre-orders/{preOrder}/pay-remaining', [PreOrderController::class, 'payRemaining'])
+    ->name('pre-orders.pay-remaining');
+    Route::patch('pre-orders/{preOrder}/status', [PreOrderController::class, 'updateStatus'])
+    ->name('pre-orders.update-status');
+    Route::get('pre-orders/{preOrder}/print', [PreOrderController::class, 'print'])
+    ->name('pre-orders.print');
 });
 
 /**
