@@ -96,6 +96,8 @@ Route::middleware(['auth', 'checkrole:kasir'])->prefix('kasir')->name('kasir.')-
     Route::get('orders/{order}/print', [KasirOrder::class, 'print'])->name('orders.print');
     Route::post('orders/{id}/bayar', [KasirOrder::class, 'bayar'])->name('orders.bayar');
 
+     Route::get('stok-roti', [KasirOrder::class, 'stock'])->name('products.stock');
+
     // Pre-Order Kasir
     Route::resource('pre-orders', KasirPreOrder::class);
     Route::get('pre-orders-payment-queue', [KasirPreOrder::class, 'antrean'])->name('pre-orders.payment-queue');
