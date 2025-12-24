@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
-    <title>@yield('title', 'Jamila Bakery - Aplikasi Kasir Digital JTINova')</title>
-    <meta name="description" content="Jamila Bakery adalah platform kasir digital cerdas untuk manajemen stok, pesanan, dan laporan penjualan yang dikembangkan oleh JTINova JTI Polije.">
+    <title>@yield('title', 'Jamila Bakery - Aplikasi Kasir Digital')</title>
+    <meta name="description" content="Jamila Bakery adalah aplikasi kasir digital modern untuk mengelola penjualan, stok bahan, dan laporan keuangan secara cepat, akurat, dan mudah digunakan. Cocok untuk bisnis bakery yang ingin berkembang lebih efisien.">
     <meta name="keywords" content="Jamila Bakery">
     <meta name="author" content="Farhan Maulana">
     <meta name="robots" content="index, follow">
