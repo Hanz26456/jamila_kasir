@@ -10,6 +10,9 @@
     <meta name="author" content="Farhan Maulana">
     <meta name="robots" content="index, follow">
 
+    <link rel="icon" type="image/png" href="{{ asset('images/logohitam.png') }}">
+<link rel="shortcut icon" type="image/png" href="{{ asset('images/logohitam.png') }}">
+
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jamilakasir.up.railway.app/">
     <meta property="og:title" content="Jamila Bakery - Inovasi Kasir Digital">

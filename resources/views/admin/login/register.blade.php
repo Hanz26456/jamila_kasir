@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link rel="icon" href="{{ asset('images/logohitam.png') }}" type="image/x-icon">
   <title>Daftar - Jamila Bakery</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
