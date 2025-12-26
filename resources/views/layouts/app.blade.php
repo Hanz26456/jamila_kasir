@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
-    <title>@yield('title', 'Jamila Bakery - Aplikasi Kasir Digital')</title>
+    <title>@yield('title', 'Jamila Bakery -  Pujer Bondowoso')</title>
     <meta name="description" content="Jamila Bakery adalah aplikasi kasir digital modern untuk mengelola penjualan, stok bahan, dan laporan keuangan secara cepat, akurat, dan mudah digunakan. Cocok untuk bisnis bakery yang ingin berkembang lebih efisien.">
     <meta name="keywords" content="Jamila Bakery">
     <meta name="author" content="Farhan Maulana">
