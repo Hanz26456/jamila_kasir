@@ -14,8 +14,7 @@ node {
     stage("Deploy"){
     sshagent(['prod-server']) {
         sh '''
-            ssh -o StrictHostKeyChecking=no farhan_maulana@172.19.0.1 "
-                cd /var/jenkins_home/172.19.0.1 &&
+            ssh -o StrictHostKeyChecking=no farhan_maulana@172.23.0.4 "
                 echo 'Deploy berhasil!'
             "
         '''
