@@ -6,8 +6,19 @@ node {
             sh 'composer install'
         }
     }
-    docker.image('ubuntu').inside('-u root') {
-        sh 'echo "Ini adalah test"'
+    stage("Testing"){
+        docker.image('ubuntu').inside('-u root') {
+            sh 'echo "Ini adalah test"'
+        }
+    }
+    stage("Deploy"){
+        sshagent(['prod-server']) {
+            sh '''
+                ssh -o StrictHostKeyChecking=no farhan_maulana@172.17.208.190 "
+                    cd /var/jenkins_home/172.17.208.190 &&
+                    echo 'Deploy berhasil!'
+                "
+            '''
+        }
     }
 }
-
