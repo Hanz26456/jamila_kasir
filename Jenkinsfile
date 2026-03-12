@@ -14,7 +14,7 @@ node {
     stage("Deploy"){
     sshagent(['prod-server']) {
         sh '''
-            ssh -o StrictHostKeyChecking=no farhan_maulana@172.23.0.4 "
+            ssh -o StrictHostKeyChecking=no -p 2222 farhan_maulana@172.23.0.4 "
                 echo 'Deploy berhasil!'
             "
         '''
