@@ -15,7 +15,7 @@ node {
         sshagent(['prod-server']) {
             sh '''
                 ssh -o StrictHostKeyChecking=no farhan_maulana@172.17.208.190 "
-                    cd /var/jenkins_home/172.17.208.190 &&
+                    cd /var/jenkins_home/172.18.0.1 &&
                     echo 'Deploy berhasil!'
                 "
             '''
